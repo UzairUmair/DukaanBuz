@@ -1,0 +1,18 @@
+import { useCallback, useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { MessageCircle, Search } from 'lucide-react';
+import { getPublicProducts, getPublicStore } from '../api/storeApi.js';
+import LoadingState from '../components/common/LoadingState.jsx';
+import StateMessage from '../components/common/StateMessage.jsx';
+import ProductCard from '../components/storefront/ProductCard.jsx';
+import { whatsappUrl } from '../utils/whatsapp.js';
+import './public-store.css';
+
+export default function PublicStore() {
+  const { slug } = useParams(); const [store, setStore] = useState(null); const [products, setProducts] = useState([]); const [loading, setLoading] = useState(true); const [error, setError] = useState(''); const [search, setSearch] = useState(''); const [category, setCategory] = useState(''); const [categories, setCategories] = useState([]);
+  const load = useCallback(async () => { setLoading(true); setError(''); try { const [nextStore, nextProducts] = await Promise.all([getPublicStore(slug), getPublicProducts(slug, { search: search || undefined, category: category || undefined })]); setStore(nextStore); setProducts(nextProducts); if (!search && !category) setCategories([...new Set(nextProducts.map((product) => product.category))].sort()); } catch (requestError) { setError(requestError.message); } finally { setLoading(false); } }, [slug, search, category]);
+  useEffect(() => { const timeout = setTimeout(load, 200); return () => clearTimeout(timeout); }, [load]);
+
+  if (loading && !store) return <LoadingState label="Opening storefront…" />; if (error && !store) return <div className="container"><StateMessage title="Storefront not found" message={error === 'Store not found' ? 'This store link does not point to an active DukaanSaz storefront.' : error} action={<Link className="btn" to="/">Go to DukaanSaz</Link>} /></div>;
+  return <div className="public-store"><section className="store-hero"><div className="container"><div><p>{store.city || 'Pakistan'}</p><h1>{store.name}</h1><span>{store.description || 'Browse the current product catalog.'}</span></div><a className="btn" href={whatsappUrl({ number: store.whatsappNumber, product: 'your catalog', price: 'the listed price', link: window.location.href })} target="_blank" rel="noreferrer"><MessageCircle size={18} />Contact seller</a></div></section><section className="store-catalog"><div className="container"><div className="catalog-head"><div><h2>Available products</h2><p>{loading ? 'Updating catalog…' : `${products.length} ${products.length === 1 ? 'product' : 'products'} shown`}</p></div><div className="store-filters"><label className="search-box"><Search size={20} /><span className="visually-hidden">Search this store</span><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search catalog" /></label><select value={category} onChange={(event) => setCategory(event.target.value)} aria-label="Filter products by category"><option value="">All categories</option>{categories.map((item) => <option key={item}>{item}</option>)}</select></div></div>{error && <p className="alert alert--error" role="alert">{error}</p>}{products.length ? <div className="public-grid">{products.map((product) => <ProductCard key={product.id} product={product} slug={slug} />)}</div> : <StateMessage title={search || category ? 'No matching products found' : 'This store has no products available yet'} message={search || category ? 'Change the search or category filter and try again.' : 'Please contact the seller for updates.'} />}</div></section></div>;
+}

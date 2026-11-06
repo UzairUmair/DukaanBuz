@@ -1,0 +1,24 @@
+/* Hallmark · seller and storefront chrome · v2.0.0 */
+.marketing-nav { position: sticky; top: 0; z-index: var(--z-sticky-nav); background: color-mix(in oklch, var(--color-paper) 92%, transparent); backdrop-filter: blur(16px); }
+.marketing-nav__inner { min-height: 76px; display: flex; align-items: center; justify-content: space-between; }
+.marketing-nav__links { display: flex; align-items: center; gap: var(--space-lg); }
+.marketing-nav__links a:not(.btn) { text-decoration: none; font-weight: 500; }
+.marketing-nav__toggle { display: none; }
+.dashboard-shell { min-height: 100dvh; display: grid; grid-template-columns: 272px minmax(0, 1fr); background: var(--color-paper-2); }
+.dashboard-sidebar { position: relative; top: 0; min-height: 100dvh; display: flex; flex-direction: column; padding: var(--space-lg); background: var(--color-field); color: var(--color-paper); z-index: var(--z-sticky); }
+.dashboard-sidebar .brand small { color: var(--color-mint); }
+.dashboard-sidebar nav { display: grid; gap: var(--space-xs); margin-top: var(--space-2xl); }
+.dashboard-sidebar nav a { display: flex; align-items: center; gap: var(--space-sm); min-height: 44px; padding-inline: var(--space-md); border-radius: var(--radius-control); color: color-mix(in oklch, var(--color-paper) 78%, var(--color-field)); text-decoration: none; }
+.dashboard-sidebar nav a:hover, .dashboard-sidebar nav a.active { background: var(--color-field-2); color: var(--color-paper); }
+.dashboard-sidebar__account { margin-top: auto; padding-top: var(--space-lg); border-top: 1px solid var(--color-field-2); }
+.dashboard-sidebar__account p { font-weight: 700; }
+.dashboard-sidebar__account small { display: block; color: var(--color-mint); overflow: hidden; text-overflow: ellipsis; }
+.sidebar-logout { display: flex; align-items: center; gap: var(--space-xs); min-height: 44px; margin-top: var(--space-md); border: 0; background: transparent; color: var(--color-paper); cursor: pointer; }
+.dashboard-main { width: 100%; min-width: 0; padding: var(--space-xl); }
+.dashboard-mobile-toggle { display: none; position: fixed; top: var(--space-sm); right: var(--space-sm); z-index: var(--z-sticky-nav); background: var(--color-surface); }
+.storefront-top { border-bottom: 1px solid var(--color-rule); background: var(--color-surface); }
+.storefront-top .container { min-height: 68px; display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); }
+.storefront-top span { color: var(--color-muted); font-size: var(--text-sm); }
+@media (max-width: 60rem) { .marketing-nav__toggle { display: grid; } .marketing-nav__links { display: none; position: absolute; inset: 76px var(--gutter) auto; padding: var(--space-lg); border: 1px solid var(--color-rule); border-radius: var(--radius-card); background: var(--color-surface); box-shadow: var(--shadow-card); } .marketing-nav__links.is-open { display: grid; } .dashboard-shell { grid-template-columns: minmax(0, 1fr); } .dashboard-sidebar { position: fixed; inset: 0 auto 0 0; width: min(320px, 88%); transform: translateX(-105%); transition: transform var(--dur-long) var(--ease-out); } .dashboard-sidebar.is-open { transform: none; } .dashboard-mobile-toggle { display: grid; } .dashboard-main { padding: var(--space-2xl) var(--space-lg) var(--space-lg); } }
+@media (max-width: 40rem) { .marketing-nav__links .btn { width: 100%; } .dashboard-main { padding-inline: var(--space-md); } .storefront-top span { display: none; } }
+@media (prefers-reduced-motion: reduce) { .dashboard-sidebar { transition: none; } }

@@ -1,0 +1,13 @@
+/* Hallmark · shared primitives · tokens in styles/tokens.css · v2.0.0 */
+.brand { display: inline-flex; align-items: center; gap: var(--space-sm); color: inherit; text-decoration: none; }
+.brand__seal { display: grid; place-items: center; width: 40px; height: 40px; border-radius: var(--radius-control); background: var(--color-field); color: var(--color-paper); font: 700 var(--text-xl)/1 var(--font-display); }
+.brand b { display: block; font-family: var(--font-display); font-size: var(--text-lg); letter-spacing: -.03em; }
+.brand small { display: block; color: var(--color-muted); line-height: 1; }
+.loading-page > div { display: grid; justify-items: center; gap: var(--space-md); }
+.spinner { display: inline-block; }
+.state-message { display: grid; justify-items: start; gap: var(--space-md); max-width: 42ch; padding-block: var(--space-2xl); }
+.state-message h2 { font-size: var(--text-2xl); text-wrap: balance; }
+.state-message p { color: var(--color-muted); }
+.product-image { aspect-ratio: 1; overflow: hidden; background: var(--color-paper-2); border-radius: var(--radius-inner); }
+.product-image img { width: 100%; height: 100%; object-fit: cover; }
+.product-image__empty { width: 100%; height: 100%; display: grid; place-content: center; justify-items: center; gap: var(--space-sm); color: var(--color-muted); text-align: center; }

@@ -1,0 +1,19 @@
+/* Hallmark · seller authentication composition · v2.0.0 */
+.auth-page { min-height: 100dvh; background: var(--color-paper-2); }
+.auth-page > header { min-height: 80px; display: flex; align-items: center; padding-inline: var(--gutter); }
+.auth-layout { min-height: calc(100dvh - 80px); display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); }
+.auth-intro { display: flex; flex-direction: column; justify-content: center; padding: var(--space-3xl) max(var(--gutter), calc((100% - 720px) / 2)); background: var(--color-field); color: var(--color-paper); }
+.auth-intro h1 { max-width: 12ch; font-size: var(--text-display-s); text-wrap: balance; }
+.auth-intro > p { max-width: 40ch; margin-top: var(--space-lg); color: var(--color-mint); font-size: var(--text-lead); }
+.auth-intro__note { display: grid; gap: var(--space-xs); max-width: 42ch; margin-top: var(--space-3xl); padding-top: var(--space-lg); border-top: 1px solid var(--color-field-2); }
+.auth-intro__note span { color: var(--color-mint); }
+.auth-form-wrap { display: grid; place-items: center; padding: var(--space-2xl) var(--gutter); }
+.auth-form { width: min(100%, 500px); display: grid; gap: var(--space-lg); }
+.auth-form h2 { font-size: var(--text-2xl); }
+.auth-form > div:first-child > p { margin-top: var(--space-xs); color: var(--color-muted); }
+.password-field { position: relative; }
+.password-field input { padding-right: 56px; }
+.password-field button { position: absolute; top: 2px; right: 2px; width: 44px; height: 44px; display: grid; place-items: center; border: 0; background: transparent; color: var(--color-muted); cursor: pointer; }
+.auth-switch { color: var(--color-muted); text-align: center; }
+.auth-switch a { color: var(--color-accent); font-weight: 700; }
+@media (max-width: 60rem) { .auth-layout { grid-template-columns: minmax(0, 1fr); } .auth-intro { padding: var(--space-2xl) var(--gutter); } .auth-intro__note { display: none; } }

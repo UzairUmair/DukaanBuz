@@ -1,0 +1,30 @@
+import { useEffect, useState } from 'react';
+import { ImagePlus, Upload, X } from 'lucide-react';
+import { formatPKR } from '../../utils/currency.js';
+import ProductImage from '../common/ProductImage.jsx';
+import './products.css';
+
+const MAX_IMAGE_BYTES = 4 * 1024 * 1024;
+const initialValues = (product) => ({ title: product?.title || '', description: product?.description || '', category: product?.category || '', price: String(product?.price ?? ''), stock: String(product?.stock ?? 0), isActive: product?.isActive ?? true });
+
+export default function ProductForm({ initial, onSubmit, submitLabel, submitting, partialSuccess }) {
+  const [values, setValues] = useState(() => initialValues(initial));
+  const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState('');
+  const [errors, setErrors] = useState({});
+
+  useEffect(() => () => preview && URL.revokeObjectURL(preview), [preview]);
+
+  const pickImage = (file) => {
+    if (!file) return;
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) return setErrors((current) => ({ ...current, image: 'Choose a JPEG, PNG or WebP image.' }));
+    if (file.size > MAX_IMAGE_BYTES) return setErrors((current) => ({ ...current, image: 'For Vercel hosting, keep the image under 4 MB.' }));
+    if (preview) URL.revokeObjectURL(preview);
+    setImage(file);
+    setPreview(URL.createObjectURL(file));
+    setErrors((current) => ({ ...current, image: '' }));
+  };
+  const change = (event) => { const { name, value, checked, type } = event.target; setValues({ ...values, [name]: type === 'checkbox' ? checked : value }); setErrors({ ...errors, [name]: '' }); };
+  const submit = (event) => { event.preventDefault(); const next = {}; if (values.title.trim().length < 2) next.title = 'Write at least two characters.'; if (!values.category.trim()) next.category = 'Choose a category.'; if (values.price === '' || Number(values.price) < 0) next.price = 'Enter a nonnegative price.'; if (!Number.isInteger(Number(values.stock)) || Number(values.stock) < 0) next.stock = 'Stock must be a whole number.'; if (Object.keys(next).length) return setErrors(next); onSubmit({ ...values, title: values.title.trim(), description: values.description.trim(), category: values.category.trim(), price: Number(values.price), stock: Number(values.stock) }, image); };
+  return <form className="product-form" onSubmit={submit} noValidate><div className="product-form__fields"><section><h2>Product information</h2><div className="form-field"><label htmlFor="title">Product title</label><input id="title" name="title" value={values.title} onChange={change} required aria-invalid={Boolean(errors.title)} /><span className={errors.title ? 'field-error' : 'field-help'}>{errors.title || 'Use the name customers recognize.'}</span></div><div className="form-field"><label htmlFor="description">Description</label><textarea id="description" name="description" value={values.description} onChange={change} maxLength="2000" /><span className="field-help">Describe the item, material, size or serving details.</span></div><div className="product-form__pair"><div className="form-field"><label htmlFor="category">Category</label><input id="category" name="category" value={values.category} onChange={change} required aria-invalid={Boolean(errors.category)} placeholder="Clothing" /><span className={errors.category ? 'field-error' : 'field-help'}>{errors.category || 'Products can be filtered by this value.'}</span></div><div className="form-field"><label htmlFor="price">Price in PKR</label><input id="price" name="price" type="number" inputMode="decimal" min="0" step="1" value={values.price} onChange={change} required aria-invalid={Boolean(errors.price)} /><span className={errors.price ? 'field-error' : 'field-help'}>{errors.price || 'Enter rupees without commas.'}</span></div></div><div className="product-form__pair"><div className="form-field"><label htmlFor="stock">Stock quantity</label><input id="stock" name="stock" type="number" inputMode="numeric" min="0" step="1" value={values.stock} onChange={change} aria-invalid={Boolean(errors.stock)} /><span className={errors.stock ? 'field-error' : 'field-help'}>{errors.stock || 'Use zero when the item is unavailable.'}</span></div><label className="switch-field"><input type="checkbox" name="isActive" checked={values.isActive} onChange={change} /><span><b>Visible in storefront</b><small>Inactive products remain in your admin catalog.</small></span></label></div></section><section><h2>Product image</h2><label className="image-drop" onDragOver={(event) => event.preventDefault()} onDrop={(event) => { event.preventDefault(); pickImage(event.dataTransfer.files[0]); }}><input type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => pickImage(event.target.files[0])} /><ImagePlus aria-hidden="true" /><strong>{image ? image.name : initial?.imageUrl ? 'Replace current image' : 'Choose a product image'}</strong><span>JPEG, PNG or WebP, under 4 MB for hosted uploads.</span></label>{errors.image && <p className="field-error">{errors.image}</p>}{preview && <div className="selected-image"><img src={preview} alt="Selected product preview" /><button className="icon-btn" type="button" onClick={() => { URL.revokeObjectURL(preview); setPreview(''); setImage(null); }} aria-label="Remove selected image"><X /></button></div>}{partialSuccess && <div className="alert alert--error" role="alert">The product was saved, but its image was not uploaded. Select an image and submit again to retry without creating another product.</div>}</section></div><aside className="product-preview"><p>Live preview</p>{preview ? <div className="product-image"><img src={preview} alt="Product preview" /></div> : <ProductImage product={initial || values} />}<h3>{values.title || 'Your product title'}</h3><strong>{formatPKR(values.price)}</strong><span>{values.stock === '0' ? 'Out of stock' : `${values.stock || 0} in stock`}</span><button className="btn" type="submit" disabled={submitting}>{submitting ? 'Saving…' : <><Upload aria-hidden="true" size={18} />{submitLabel}</>}</button></aside></form>;
+}
