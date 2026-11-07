@@ -45,7 +45,7 @@ export default function Dashboard() {
 
   return <div className="dashboard-page">
     <header className="page-head dashboard-welcome">
-      <div><p>Welcome back, {user?.fullName?.split(' ')[0]}</p><h1>{store.name}</h1><span>Your store is ready to share.</span></div>
+      <div><p>{store.name}</p><h1>Welcome back, {user?.fullName?.split(' ')[0]}</h1><span>Your inventory and public catalog at a glance.</span></div>
       <Link className="btn" to="/dashboard/products/new"><Plus size={18} aria-hidden="true" />Add product</Link>
     </header>
     <section className="dashboard-overview" aria-label="Store overview">
@@ -54,10 +54,9 @@ export default function Dashboard() {
         <article><strong className="num">{stats.activeProducts}</strong><span>Active products</span></article>
         <article><strong className="num">{stats.outOfStockProducts}</strong><span>Out of stock</span></article>
       </div>
-      <aside className="dashboard-store-link"><p>Public storefront</p><strong>/s/{store.slug}</strong><span>Share this address with customers.</span><div><button type="button" className="btn btn--quiet" onClick={copyLink}><Copy size={17} aria-hidden="true" />{copied ? 'Copied' : 'Copy link'}</button><a className="btn btn--quiet" href={'/s/' + store.slug} target="_blank" rel="noreferrer"><ExternalLink size={17} aria-hidden="true" />View store</a></div></aside>
-    </section>
+      </section><div className="dashboard-columns"><aside className="dashboard-store-link">{products.find(p=>p.imageUrl) && <ProductImage product={products.find(p=>p.imageUrl)} className="sharing-image"/>}<p>Public storefront</p><strong>/s/{store.slug}</strong><span>Share this address with customers.</span><div><button type="button" className="btn btn--quiet" onClick={copyLink}><Copy size={17} aria-hidden="true" />{copied ? 'Copied' : 'Copy link'}</button><a className="btn btn--quiet" href={'/s/' + store.slug} target="_blank" rel="noreferrer"><ExternalLink size={17} aria-hidden="true" />View store</a></div></aside>
     <section className="recent-products"><div className="section-head"><div><h2>Recent products</h2><p>Your newest catalog items.</p></div><Link to="/dashboard/products">Manage products <ArrowUpRight size={18} aria-hidden="true" /></Link></div>
       {products.length ? <div className="recent-products__grid">{products.map((product) => <Link key={product.id} to={'/dashboard/products/' + product.id + '/edit'}><ProductImage product={product} /><div><h3>{product.title}</h3><strong>{formatPKR(product.price)}</strong><span>{product.stock > 0 ? product.stock + ' in stock' : 'Out of stock'}</span></div></Link>)}</div> : <StateMessage title="No products yet" message="Add the first item to begin your public catalog." action={<Link className="btn" to="/dashboard/products/new">Add your first product</Link>} />}
-    </section>
+    </section></div>
   </div>;
 }

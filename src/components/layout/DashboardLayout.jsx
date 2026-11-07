@@ -1,18 +1,50 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { Drawer, useMediaQuery } from '@mui/material';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, LogOut, Menu, Package, Plus, Settings, Store, X } from 'lucide-react';
 import { getMyStore } from '../../api/storeApi.js';
 import { useAuth } from '../../hooks/useAuth.js';
 import Logo from '../common/Logo.jsx';
+import StateMessage from '../common/StateMessage.jsx';
 import './layout.css';
 
 const items = [
-  ['/dashboard', 'Overview', LayoutDashboard, true], ['/dashboard/products', 'Products', Package], ['/dashboard/products/new', 'Add product', Plus], ['/dashboard/store', 'Store settings', Settings],
+  ['/dashboard', 'Overview', LayoutDashboard],
+  ['/dashboard/products', 'Products', Package],
+  ['/dashboard/products/new', 'Add product', Plus],
+  ['/dashboard/store', 'Store settings', Settings],
 ];
+
 export default function DashboardLayout() {
-  const [open, setOpen] = useState(false); const [store, setStore] = useState(null); const [storeLoading, setStoreLoading] = useState(true); const { user, logout } = useAuth(); const navigate = useNavigate(); const location = useLocation();
-  const loadStore = () => getMyStore().then(setStore).catch(() => setStore(null)).finally(() => setStoreLoading(false));
-  useEffect(() => { loadStore(); }, [location.pathname]);
-  const signOut = () => { logout(); navigate('/'); };
-  return <div className="dashboard-shell"><button className="icon-btn dashboard-mobile-toggle" type="button" onClick={() => setOpen(!open)} aria-label={open ? 'Close dashboard navigation' : 'Open dashboard navigation'}>{open ? <X /> : <Menu />}</button><aside className={open ? 'dashboard-sidebar is-open' : 'dashboard-sidebar'}><Logo compact /><nav aria-label="Seller navigation">{items.map(([to, label, Icon, end]) => <NavLink key={to} to={to} end={end} onClick={() => setOpen(false)}><Icon aria-hidden="true" size={20} />{label}</NavLink>)}{store && <a href={`/s/${store.slug}`} target="_blank" rel="noreferrer"><Store aria-hidden="true" size={20} />View store</a>}</nav><div className="dashboard-sidebar__account"><p>{user?.fullName}</p><small>{user?.email}</small><button className="sidebar-logout" type="button" onClick={signOut}><LogOut aria-hidden="true" size={18} />Logout</button></div></aside><main id="main-content" className="dashboard-main"><Outlet context={{ store, storeLoading, refreshStore: loadStore }} /></main></div>;
+  const compact = useMediaQuery('(max-width:60rem)');
+  const [open, setOpen] = useState(false);
+  const [store, setStore] = useState(null);
+  const [storeLoading, setStoreLoading] = useState(true);
+  const [error, setError] = useState('');
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const loadStore = useCallback(() => getMyStore().then(value => {
+    setStore(value);
+    setError('');
+  }).catch(reason => setError(reason.message)).finally(() => setStoreLoading(false)), []);
+  useEffect(() => { loadStore(); }, [loadStore, pathname]);
+  const section = items.find(([to]) => to === pathname)?.[1] || 'Edit product';
+  const navigation = <aside className="merchant-rail">
+    <div className="rail-brand"><Logo compact />{compact && <button className="icon-btn" aria-label="Close navigation" onClick={() => setOpen(false)}><X /></button>}</div>
+    <nav aria-label="Seller navigation">{items.map(([to, label, Icon]) =>
+      <NavLink key={to} end to={to} onClick={() => setOpen(false)}><Icon size={19} />{label}</NavLink>)}
+      {store && <a href={'/s/' + store.slug} target="_blank" rel="noreferrer"><Store size={19} />View store</a>}
+    </nav>
+    <div className="rail-account"><strong>{user?.fullName}</strong><small>{user?.email}</small><button onClick={() => { logout(); navigate('/'); }}><LogOut size={17}/>Logout</button></div>
+  </aside>;
+  return <div className="merchant-shell">
+    {compact ? <Drawer open={open} onClose={() => setOpen(false)}>{navigation}</Drawer> : navigation}
+    <div className="merchant-content">
+      <header className="workspace-bar">{compact && <button className="icon-btn" aria-label="Open seller navigation" aria-expanded={open} onClick={() => setOpen(true)}><Menu /></button>}
+        <span>{store?.name || 'Seller workspace'}</span><span aria-hidden="true">/</span><strong>{section}</strong>
+      </header>
+      <main id="main-content" className="workspace-main">{error ? <StateMessage title="Could not open your store" message={error} action={<button className="btn" onClick={loadStore}>Try again</button>}/> : <Outlet context={{store, storeLoading, refreshStore: loadStore}}/>}</main>
+    </div>
+  </div>;
 }

@@ -5,6 +5,9 @@
 .brand small { display: block; color: var(--color-muted); line-height: 1; }
 .loading-page > div { display: grid; justify-items: center; gap: var(--space-md); }
 .spinner { display: inline-block; }
+.loading-skeleton { display: grid; gap: var(--space-sm); width: min(360px, 70vw); margin-top: var(--space-lg); }
+.loading-skeleton span { display: block; height: 48px; background: var(--color-paper-3); border-radius: var(--radius-control); }
+.loading-skeleton span:last-child { width: 70%; }
 .state-message { display: grid; justify-items: start; gap: var(--space-md); max-width: 42ch; padding-block: var(--space-2xl); }
 .state-message h2 { font-size: var(--text-2xl); text-wrap: balance; }
 .state-message p { color: var(--color-muted); }

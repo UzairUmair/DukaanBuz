@@ -1,4 +1,14 @@
 /* Hallmark · seller authentication composition · v2.0.0 */
+.auth-workspace.auth-page { background: var(--color-paper); }
+.auth-workspace .auth-layout { max-width: 1100px; min-height: auto; margin: var(--space-2xl) auto; padding: var(--space-xl); grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: var(--space-2xl); align-items: start; }
+.auth-workspace .auth-intro { padding: var(--space-xl) 0; background: transparent; color: var(--color-ink); justify-content: start; }
+.auth-workspace .auth-intro h1 { font-size: clamp(2rem, 3vw, 3.25rem); max-width: 12ch; line-height: 1.12; }
+.auth-workspace .auth-intro > p, .auth-workspace .auth-intro__note span { color: var(--color-muted); }
+.auth-workspace .auth-intro__note { margin-top: var(--space-xl); border-color: var(--color-rule); }
+.auth-workspace .auth-form-wrap { padding: var(--space-xl); border: 1px solid var(--color-rule); border-radius: var(--radius-card); background: var(--color-surface); }
+.auth-workspace .auth-form { padding: 0; gap: var(--space-lg); }
+.auth-workspace .auth-form h2 { font-size: var(--text-2xl); }
+@media (max-width: 48rem) { .auth-workspace .auth-layout { grid-template-columns: minmax(0, 1fr); margin-block: var(--space-lg); padding: var(--space-lg); gap: var(--space-lg); } .auth-workspace .auth-intro { padding: 0; } .auth-workspace .auth-intro h1 { max-width: 22ch; font-size: var(--text-2xl); } .auth-workspace .auth-intro > p, .auth-workspace .auth-intro__note { display: none; } .auth-workspace .auth-form-wrap { padding: var(--space-lg); } }
 .auth-page { min-height: 100dvh; background: var(--color-paper-2); }
 .auth-page > header { min-height: 80px; display: flex; align-items: center; padding-inline: var(--gutter); }
 .auth-layout { min-height: calc(100dvh - 80px); display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); }

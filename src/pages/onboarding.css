@@ -1,4 +1,14 @@
 /* Hallmark · seller setup · v2.0.0 */
+.setup-workspace .onboarding-layout { max-width: 1180px; gap: var(--space-2xl); grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); }
+.setup-workspace .onboarding-copy h1 { font-size: clamp(2rem, 3vw, 3.25rem); max-width: 15ch; }
+.setup-address { display: grid; gap: var(--space-sm); margin-top: var(--space-xl); padding: var(--space-lg); background: var(--color-field); color: var(--color-surface); border-radius: var(--radius-card); }
+.setup-address span { color: var(--color-mint); font-size: var(--text-sm); }
+.setup-address strong { overflow-wrap: anywhere; font-size: var(--text-md); }
+.setup-address p { border-top: 1px solid var(--color-field-2); padding-top: var(--space-md); font-size: var(--text-xl); }
+.setup-workspace .onboarding-copy ul { border-top: 0; font-size: var(--text-sm); }
+.setup-workspace .onboarding-form { box-shadow: none; border: 1px solid var(--color-rule); }
+.setup-workspace .field-help { overflow-wrap: anywhere; }
+@media (max-width: 48rem) { .setup-workspace .onboarding-layout { grid-template-columns: minmax(0, 1fr); padding-block: var(--space-lg); gap: var(--space-lg); } .setup-workspace .onboarding-copy { position: static; } .setup-workspace .onboarding-copy ul { display: none; } .setup-workspace .onboarding-copy h1 { max-width: 25ch; } .setup-workspace .onboarding-copy h1 + p { margin-top: var(--space-sm); } .setup-address { margin-top: var(--space-lg); } }
 .onboarding-page { min-height: 100dvh; background: var(--color-paper-2); }
 .onboarding-page > header { min-height: 80px; display: flex; align-items: center; padding-inline: var(--gutter); }
 .onboarding-layout { max-width: 1120px; margin-inline: auto; display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: var(--space-3xl); align-items: start; padding: var(--space-2xl) var(--gutter); }

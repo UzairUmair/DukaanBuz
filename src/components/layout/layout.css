@@ -22,3 +22,16 @@
 @media (max-width: 60rem) { .marketing-nav__toggle { display: grid; } .marketing-nav__links { display: none; position: absolute; inset: 76px var(--gutter) auto; padding: var(--space-lg); border: 1px solid var(--color-rule); border-radius: var(--radius-card); background: var(--color-surface); box-shadow: var(--shadow-card); } .marketing-nav__links.is-open { display: grid; } .dashboard-shell { grid-template-columns: minmax(0, 1fr); } .dashboard-sidebar { position: fixed; inset: 0 auto 0 0; width: min(320px, 88%); transform: translateX(-105%); transition: transform var(--dur-long) var(--ease-out); } .dashboard-sidebar.is-open { transform: none; } .dashboard-mobile-toggle { display: grid; } .dashboard-main { padding: var(--space-2xl) var(--space-lg) var(--space-lg); } }
 @media (max-width: 40rem) { .marketing-nav__links .btn { width: 100%; } .dashboard-main { padding-inline: var(--space-md); } .storefront-top span { display: none; } }
 @media (prefers-reduced-motion: reduce) { .dashboard-sidebar { transition: none; } }
+.merchant-shell { display:grid; grid-template-columns:228px minmax(0,1fr); min-height:100dvh; background:var(--color-paper); }
+.merchant-rail { position:sticky; inset-block-start:0; height:100dvh; width:228px; display:flex; flex-direction:column; gap:var(--space-xl); padding:var(--space-lg) var(--space-md); background:var(--color-field); color:var(--color-paper); overflow:auto; }
+.rail-brand { display:flex; align-items:center; justify-content:space-between; }
+.merchant-rail nav,.rail-account { display:grid; gap:var(--space-xs); }
+.merchant-rail nav a,.rail-account button { display:flex; align-items:center; gap:var(--space-sm); min-height:44px; padding-inline:var(--space-md); border:0; border-radius:var(--radius-control); background:transparent; color:inherit; text-decoration:none; cursor:pointer; }
+.merchant-rail nav a:hover,.rail-account button:hover { background:var(--color-field-2); }
+.merchant-rail nav a.active { background:var(--color-mint); color:var(--color-field); font-weight:700; }
+.rail-account { margin-top:auto; padding-top:var(--space-lg); border-top:1px solid var(--color-field-2); overflow-wrap:anywhere; }
+.rail-account small { color:var(--color-mint); }
+.workspace-bar { display:flex; align-items:center; gap:var(--space-md); padding-inline:var(--space-xl); min-height:60px; border-bottom:1px solid var(--color-rule); background:var(--color-surface); }
+.workspace-bar span { color:var(--color-muted); }
+.workspace-main { padding:var(--space-xl); }
+@media(max-width:60rem){.merchant-shell{grid-template-columns:minmax(0,1fr)}.workspace-main,.workspace-bar{padding-inline:var(--space-md)}.workspace-main{padding-block:var(--space-lg)}}
