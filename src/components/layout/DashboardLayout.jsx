@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Drawer, useMediaQuery } from '@mui/material';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, LogOut, Menu, Package, Plus, Settings, Store, X } from 'lucide-react';
+import { Paintbrush, LayoutDashboard, LogOut, Menu, Package, Plus, Settings, Store, X } from 'lucide-react';
 import { getMyStore } from '../../api/storeApi.js';
 import { useAuth } from '../../hooks/useAuth.js';
 import Logo from '../common/Logo.jsx';
@@ -12,6 +12,7 @@ const items = [
   ['/dashboard', 'Overview', LayoutDashboard],
   ['/dashboard/products', 'Products', Package],
   ['/dashboard/products/new', 'Add product', Plus],
+  ['/dashboard/store/design', 'Customize store', Paintbrush],
   ['/dashboard/store', 'Store settings', Settings],
 ];
 

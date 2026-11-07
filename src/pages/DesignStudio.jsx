@@ -1,0 +1,22 @@
+import { useEffect, useState } from 'react';
+import { getMyStore } from '../api/storeApi.js';
+import { getProducts } from '../api/productApi.js';
+import api, { unwrap } from '../api/client.js';
+import PublicStore from './PublicStore.jsx';
+import { defaults, presets } from '../components/storefront/themeConfig.js';
+import LoadingState from '../components/common/LoadingState.jsx';
+import './studio.css';
+
+export default function DesignStudio() {
+  const [store,setStore]=useState(null),[products,setProducts]=useState([]),[draft,setDraft]=useState(defaults),[saved,setSaved]=useState(defaults),[device,setDevice]=useState('desktop'),[message,setMessage]=useState(''),[busy,setBusy]=useState(false);
+  const dirty=JSON.stringify(draft)!==JSON.stringify(saved);
+  useEffect(()=>{Promise.all([getMyStore(),getProducts()]).then(([s,p])=>{setStore(s);setProducts(p);setDraft({...defaults,...s.appearance});setSaved({...defaults,...s.appearance});}).catch(e=>setMessage(e.message));},[]);
+  useEffect(()=>{const warn=e=>{if(dirty){e.preventDefault();e.returnValue='';}};window.addEventListener('beforeunload',warn);return()=>window.removeEventListener('beforeunload',warn);},[dirty]);
+  const update=(key,value)=>setDraft(current=>({...current,[key]:value}));
+  async function publish(){setBusy(true);try{const s=unwrap(await api.put('/stores/me/appearance',draft));setStore(s);setSaved({...defaults,...s.appearance});setDraft({...defaults,...s.appearance});setMessage('Design published.');}catch(e){setMessage(e.message);}finally{setBusy(false);}}
+  if(!store)return <><p role="alert">{message}</p><LoadingState label="Opening design studio…"/></>;
+  return <div className="design-studio"><header className="studio-head"><div><h1>Store Design Studio</h1><p>{dirty?'Unsaved changes':'Published design'} · {store.name}</p></div><button className="btn" disabled={busy||!dirty} onClick={publish}>{busy?'Publishing…':'Save & Publish'}</button></header>{message&&<p role="status" className="alert">{message}</p>}<div className="studio-grid"><aside className="studio-controls"><h2>Theme</h2>{Object.keys(presets).map(key=><button className={'theme-choice '+(draft.themePreset===key?'selected':'')} key={key} onClick={()=>setDraft({...draft,...presets[key],themePreset:key})}>{({heritage:'Heritage Green',editorial:'Editorial Cream',modern:'Modern Contrast'})[key]}<span style={{background:presets[key].primaryColor}}/></button>)}
+    {['primaryColor','accentColor','backgroundColor'].map(key=><label key={key}>{key.replace('Color',' color')}<input type="color" value={draft[key]} onChange={e=>update(key,e.target.value)}/></label>)}
+    {Object.entries({fontPreset:['inter','manrope','jakarta'],headerStyle:['minimal','centered','editorial'],productCardStyle:['minimal','soft','editorial'],gridDensity:['compact','comfortable','spacious'],heroLayout:['split','banner','minimal']}).map(([key,options])=><label key={key}>{key.replace(/([A-Z])/g,' $1')}<select value={draft[key]} onChange={e=>update(key,e.target.value)}>{options.map(option=><option key={option}>{option}</option>)}</select></label>)}
+    <label>Hero title<input maxLength={120} value={draft.heroTitle} onChange={e=>update('heroTitle',e.target.value)}/></label><label>Hero subtitle<textarea maxLength={500} value={draft.heroSubtitle} onChange={e=>update('heroSubtitle',e.target.value)}/></label><p>Hero imagery uses your uploaded products. Dedicated logo and banner uploads are unavailable.</p><button className="btn btn--quiet" onClick={()=>setDraft(saved)}>Reset unsaved changes</button><button className="btn btn--quiet" onClick={()=>setDraft(defaults)}>Restore default theme</button></aside><section className="studio-stage"><div className="preview-devices">{['desktop','tablet','mobile'].map(size=><button key={size} aria-pressed={device===size} onClick={()=>setDevice(size)}>{size}</button>)}</div><div className={'studio-preview '+device}><PublicStore previewStore={{...store,appearance:draft}} previewProducts={products}/></div></section></div></div>;
+}
