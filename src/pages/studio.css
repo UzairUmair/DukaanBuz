@@ -17,3 +17,25 @@
 .collection-cover[data-position=right] .cover-story{order:2}.collection-cover[data-position=right] .cover-gallery{order:1}
 .preview-pages{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:0 0 14px}.preview-pages button{border:1px solid #cbd5cb;background:#fff;border-radius:8px;padding:7px 14px;text-transform:capitalize;cursor:pointer}.preview-pages button[aria-pressed=true]{background:#063d32;color:white;border-color:#063d32}
 @container(max-width:650px){.collection-cover[data-position=right] .cover-story{order:0}.collection-cover[data-position=right] .cover-gallery{order:0}}
+
+/* Keep every form control inside the studio's padded settings panel. */
+.studio-controls,
+.studio-controls *,
+.studio-controls *::before,
+.studio-controls *::after {
+  box-sizing: border-box;
+}
+
+.studio-controls,
+.studio-group,
+.studio-controls label {
+  min-width: 0;
+}
+
+.studio-controls :is(input, select, textarea, .theme-choice) {
+  max-width: 100%;
+}
+
+.studio-controls input[type="file"] {
+  min-width: 0;
+}
