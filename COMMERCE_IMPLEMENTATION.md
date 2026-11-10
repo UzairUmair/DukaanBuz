@@ -25,3 +25,12 @@ The order integration suite uses a temporary MongoDB replica set and two sellers
 The browser suite used two isolated stores and checked cart persistence, item removal, quantities, checkout persistence, receipt, cleanup, seller fulfillment, Buy Now and mobile rendering. Screenshots are in frontend/docs/commerce-checks.
 
 Production smoke verification should use only designated test products. A pending request can be rejected without changing stock. Real customer orders must remain untouched.
+## Completed deployment checks
+
+The backend and frontend were deployed through their existing GitHub/Vercel projects. Production CORS returned the deployed frontend origin.
+
+The live API smoke test created designated test requests, verified duplicate replay and the limited public confirmation response, confirmed/processed/completed an order, verified exactly one stock deduction, restored the designated test product stock, rejected another pending request and read real seller statistics.
+
+The live browser test opened Uzair Fashion, added a designated test item, refreshed the cart, submitted guest checkout at mobile width, received an actual persisted reference and verified cart cleanup. The seller opened the new request, rejected it through the status-confirmation dialog and refreshed to verify persistence. Test requests remain explicitly named TEST in the seller dashboard. No payment was collected.
+
+Two-seller ownership and simultaneous-stock tests were run against an isolated MongoDB replica set. A second production seller lifecycle was not repeated. These are distinct from the successful live single-store API and browser checks.
