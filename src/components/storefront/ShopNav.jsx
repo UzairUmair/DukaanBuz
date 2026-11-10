@@ -1,6 +1,23 @@
-import { Link } from 'react-router-dom';
-import { Store, MessageCircle } from 'lucide-react';
+import { Link, NavLink } from 'react-router-dom';
+import { Store } from 'lucide-react';
+
 export default function ShopNav({ store }) {
-  const path = '/s/' + store.slug;
-  return <header className="shop-nav"><nav className="container" aria-label="Store navigation"><Link className="shop-name" to={path}><Store size={20}/>{store.name}</Link><Link to={path+'#catalog'} onClick={()=>document.getElementById('catalog')?.scrollIntoView()}>Collection</Link><a aria-disabled={store.isDemo} onClick={e=>store.isDemo && e.preventDefault()} href={store.isDemo ? undefined : 'https://wa.me/'+store.whatsappNumber.replace(/^0/,'92').replace(/\D/g,'')} target="_blank" rel="noreferrer"><MessageCircle size={17}/> Contact</a></nav></header>;
+  const root = '/s/' + store.slug;
+  const appearance = store.appearance || {};
+  const order = appearance.navigationOrder === 'story-first'
+    ? ['Home', 'About', 'Catalog', 'Contact']
+    : ['Home', 'Catalog', 'About', 'Contact'];
+  const pages = order.filter(label =>
+    (label !== 'About' || appearance.showAbout !== 'no') &&
+    (label !== 'Contact' || appearance.showContact !== 'no')
+  );
+  return <header className="shop-nav"><nav className="container" aria-label="Store navigation">
+    <Link className="shop-name" data-position={store.appearance?.logoPosition} to={root}>
+      {store.appearance?.brandLogo ? <img className="merchant-logo" alt="" src={store.appearance.brandLogo}/> : <Store size={20}/>}
+      <span>{store.name}</span>
+    </Link>
+    <div className="shop-links">{pages.map(label=>
+      <NavLink end key={label} to={label==='Home'?root:root+'/'+label.toLowerCase()}>{label}</NavLink>
+    )}</div>
+  </nav></header>;
 }

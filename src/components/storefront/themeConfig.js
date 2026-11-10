@@ -3,4 +3,4 @@ export const presets = {
   editorial: { primaryColor:'#302923', accentColor:'#d6c7ad', backgroundColor:'#faf3e6' },
   modern: { primaryColor:'#15263c', accentColor:'#b9cef1', backgroundColor:'#ffffff' },
 };
-export const defaults = { ...presets.heritage, themePreset:'heritage', fontPreset:'inter', headerStyle:'minimal', productCardStyle:'soft', gridDensity:'comfortable', heroLayout:'split', heroTitle:'', heroSubtitle:'' };
+export const defaults = { ...presets.heritage, themePreset:'heritage', fontPreset:'inter', headerStyle:'minimal', productCardStyle:'soft', gridDensity:'comfortable', heroLayout:'split', navigationOrder:'standard', showAbout:'yes', showContact:'yes', coverPosition:'left', homeProducts:'3', brandLogo:'', logoPosition:'beside', heroTitle:'', heroSubtitle:'' };
