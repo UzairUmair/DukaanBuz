@@ -11,3 +11,5 @@ import './styles/redesign.css';
 createRoot(document.getElementById('root')).render(<StrictMode><ThemeProvider theme={theme}><CssBaseline /><AuthProvider><App /></AuthProvider></ThemeProvider></StrictMode>);
 import './styles/edition.css';
 import './pages/studio.css';
+
+import './pages/commerce.css';

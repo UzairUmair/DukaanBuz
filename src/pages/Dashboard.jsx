@@ -1,3 +1,4 @@
+import OrderOverview from '../components/cart/OrderOverview.jsx';
 import { useEffect, useState } from 'react';
 import { Link, Navigate, useOutletContext } from 'react-router-dom';
 import { ArrowUpRight, Copy, ExternalLink, Plus } from 'lucide-react';
@@ -48,7 +49,7 @@ export default function Dashboard() {
       <div><p>{store.name}</p><h1>Welcome back, {user?.fullName?.split(' ')[0]}</h1><span>Your inventory and public catalog at a glance.</span></div>
       <Link className="btn" to="/dashboard/products/new"><Plus size={18} aria-hidden="true" />Add product</Link>
     </header>
-    <section className="dashboard-overview" aria-label="Store overview">
+    <OrderOverview/><section className="dashboard-overview" aria-label="Store overview">
       <div className="dashboard-stats">
         <article><strong className="num">{stats.totalProducts}</strong><span>Total products</span></article>
         <article><strong className="num">{stats.activeProducts}</strong><span>Active products</span></article>
